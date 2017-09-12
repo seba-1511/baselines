@@ -3,6 +3,7 @@ import baselines.common.tf_util as U
 import tensorflow as tf
 import gym
 from baselines.common.distributions import make_pdtype
+import numpy as np
 
 class MlpPolicy(object):
     recurrent = False
@@ -48,6 +49,8 @@ class MlpPolicy(object):
         self._act = U.function([stochastic, ob], [ac, self.vpred])
 
     def act(self, stochastic, ob):
+        if not type(ob) is np.ndarray:
+            ob = np.array(ob)
         ac1, vpred1 =  self._act(stochastic, ob[None])
         return ac1[0], vpred1[0]
     def get_variables(self):
